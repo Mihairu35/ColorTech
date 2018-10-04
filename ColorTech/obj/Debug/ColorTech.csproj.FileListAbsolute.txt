@@ -1,0 +1,12 @@
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\bin\Debug\ColorTech.exe.config
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\bin\Debug\ColorTech.exe
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\bin\Debug\ColorTech.pdb
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\bin\Debug\MetroFramework.Design.dll
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\bin\Debug\MetroFramework.dll
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\obj\Debug\ColorTech.csprojResolveAssemblyReference.cache
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\obj\Debug\ColorTech.Properties.Resources.resources
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\obj\Debug\ColorTech.csproj.GenerateResource.Cache
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\obj\Debug\ColorTech.exe
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\obj\Debug\ColorTech.pdb
+C:\Users\mis50\Desktop\coding\sharp\ColorTech\ColorTech\obj\Debug\ColorTech.MainForm.resources

@@ -55,6 +55,18 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Animator.dll" size="51712">
+      <assemblyIdentity name="Animator" version="1.0.3.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>7KPG/8jDxcH7nQsRFlHOdtTPGqkOED7v18Z27WsqOrk=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ColorSlider.dll" size="32256">
       <assemblyIdentity name="ColorSlider" version="1.0.0.2" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -67,14 +79,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ColorTech.exe" size="957440">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ColorTech.exe" size="1177600">
       <assemblyIdentity name="ColorTech" version="1.0.0.2" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>sofXksNPXuWPpQ75HxehdW4aqyyfGmjnPeb0kZI0NRI=</dsig:DigestValue>
+        <dsig:DigestValue>Y28RI179l3nrj+RRJM6XzGVGasvcAEpL23LAkMsTEPc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -127,24 +139,48 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="662528">
-      <assemblyIdentity name="Newtonsoft.Json" version="11.0.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LaMarvin.Windows.Forms.ColorPicker.dll" size="12288">
+      <assemblyIdentity name="LaMarvin.Windows.Forms.ColorPicker" version="1.0.1394.32945" language="neutral" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>9Yw3T/yq5ONtdA2Q+/f+cNCrtzKM2a86CntwgD6ZS6Q=</dsig:DigestValue>
+        <dsig:DigestValue>8NV9WRexhxgEzZNzEr9CYJlBjRE9jVo8Q7qLKsrooU4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="ColorTech.exe.config" size="1308">
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="675240">
+      <assemblyIdentity name="Newtonsoft.Json" version="12.0.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>tmdJuB4UifzY11SyrTnr4NtoE0TjkqP0nckjVkO9vQY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="OfficePickers.dll" size="45056">
+      <assemblyIdentity name="OfficePickers" version="1.1.2769.15829" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>1vtOCwcT3y0CJBMcnThgBI02CodqB2ZnqFqRI4CoKho=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="ColorTech.exe.config" size="1962">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>Wxh6Nne3MQ8Q612pik8UvuVE8ta8GZ+TMYtmd9rX4z8=</dsig:DigestValue>
+      <dsig:DigestValue>55PLQQ+lkvGTELoO54hht7Lx5ZKNsHyllsGrZ8a6JSk=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Resources\colortech.ico" size="205381">

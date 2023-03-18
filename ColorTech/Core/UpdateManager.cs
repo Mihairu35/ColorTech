@@ -18,6 +18,7 @@ namespace ColorTech.Core {
 		public static UpdateVersion GetUpdateFullInfo() {
 			using(WebClient client = new WebClient()) {
 				string LastVersionJSON = client.DownloadString("https://update.quadvector.ru/?action=getproductlastversion&productid=1&full=1");
+				
 				UpdateVersion LastVersionInfo = JsonConvert.DeserializeObject<UpdateVersion>(LastVersionJSON);
 
 				return LastVersionInfo;

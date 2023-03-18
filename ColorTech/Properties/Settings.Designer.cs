@@ -12,7 +12,7 @@ namespace ColorTech.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,7 +25,7 @@ namespace ColorTech.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
         public global::System.Drawing.Color LastColor {
             get {
                 return ((global::System.Drawing.Color)(this["LastColor"]));
@@ -38,24 +38,24 @@ namespace ColorTech.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public int LastZoom {
+        public int ScreenshotScaleIndex {
             get {
-                return ((int)(this["LastZoom"]));
+                return ((int)(this["ScreenshotScaleIndex"]));
             }
             set {
-                this["LastZoom"] = value;
+                this["ScreenshotScaleIndex"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int LastColorStringFormatIndex {
+        public int ColorStringFormatIndex {
             get {
-                return ((int)(this["LastColorStringFormatIndex"]));
+                return ((int)(this["ColorStringFormatIndex"]));
             }
             set {
-                this["LastColorStringFormatIndex"] = value;
+                this["ColorStringFormatIndex"] = value;
             }
         }
         
@@ -68,6 +68,138 @@ namespace ColorTech.Properties {
             }
             set {
                 this["OpenUpdateWindow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool StartProgrammOnStartup {
+            get {
+                return ((bool)(this["StartProgrammOnStartup"]));
+            }
+            set {
+                this["StartProgrammOnStartup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowOnTray {
+            get {
+                return ((bool)(this["ShowOnTray"]));
+            }
+            set {
+                this["ShowOnTray"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ColorFormatUppercase {
+            get {
+                return ((bool)(this["ColorFormatUppercase"]));
+            }
+            set {
+                this["ColorFormatUppercase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PopupWindow {
+            get {
+                return ((bool)(this["PopupWindow"]));
+            }
+            set {
+                this["PopupWindow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BackgroundCheckUpdate {
+            get {
+                return ((bool)(this["BackgroundCheckUpdate"]));
+            }
+            set {
+                this["BackgroundCheckUpdate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ToolBarVisible {
+            get {
+                return ((bool)(this["ToolBarVisible"]));
+            }
+            set {
+                this["ToolBarVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool StatusBarVisible {
+            get {
+                return ((bool)(this["StatusBarVisible"]));
+            }
+            set {
+                this["StatusBarVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ScreenshotCrosshairVisible {
+            get {
+                return ((bool)(this["ScreenshotCrosshairVisible"]));
+            }
+            set {
+                this["ScreenshotCrosshairVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Segoe UI, 10pt")]
+        public global::System.Drawing.Font ColorPreviewFont {
+            get {
+                return ((global::System.Drawing.Font)(this["ColorPreviewFont"]));
+            }
+            set {
+                this["ColorPreviewFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ColorPreviewFontVisible {
+            get {
+                return ((bool)(this["ColorPreviewFontVisible"]));
+            }
+            set {
+                this["ColorPreviewFontVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ColorPreviewTextVisible {
+            get {
+                return ((bool)(this["ColorPreviewTextVisible"]));
+            }
+            set {
+                this["ColorPreviewTextVisible"] = value;
             }
         }
     }

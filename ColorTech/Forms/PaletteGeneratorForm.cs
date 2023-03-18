@@ -127,7 +127,7 @@ namespace ColorTech.Forms {
 
 			//рисуем просмотр цвета
 			PreviewGR.Clear(Color.Transparent);
-			int SquareWidth = PreviewBox.Width / PreviewCellsCount;
+			float SquareWidth = 40;
 			int PreviewRowsCount = 0;
 			int StartCellPosition = 0;
 			for(int i = 0; i < SelectedColors.Count; i++) {

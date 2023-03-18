@@ -3,15 +3,48 @@
   <Profiles />
   <Settings>
     <Setting Name="LastColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">0, 0, 0, 0</Value>
+      <Value Profile="(Default)">Black</Value>
     </Setting>
-    <Setting Name="LastZoom" Type="System.Int32" Scope="User">
+    <Setting Name="ScreenshotScaleIndex" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="LastColorStringFormatIndex" Type="System.Int32" Scope="User">
+    <Setting Name="ColorStringFormatIndex" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="OpenUpdateWindow" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="StartProgrammOnStartup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowOnTray" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ColorFormatUppercase" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="PopupWindow" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="BackgroundCheckUpdate" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ToolBarVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="StatusBarVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ScreenshotCrosshairVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ColorPreviewFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Segoe UI, 10pt</Value>
+    </Setting>
+    <Setting Name="ColorPreviewFontVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ColorPreviewTextVisible" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

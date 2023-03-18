@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ColorTech</RootNamespace>
     <AssemblyName>ColorTech</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -23,8 +24,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -51,7 +52,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\colortech.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\images\colortech.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -63,15 +64,17 @@
       <HintPath>..\packages\AlphaGradientPanel.1.1.2.0\lib\net40\AlphaGradientPanel.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Animator">
+      <HintPath>D:\winformscontrols\animator\Animator.dll</HintPath>
+    </Reference>
     <Reference Include="ColorSlider">
       <HintPath>..\packages\ColorSlider.dll</HintPath>
     </Reference>
     <Reference Include="DropDownPanel">
       <HintPath>D:\winformscontrols\DropDownPanel.dll</HintPath>
     </Reference>
-    <Reference Include="FastBitmapLib, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FastBitmapLib.1.1.2\lib\net452\FastBitmapLib.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FastBitmapLib, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastBitmapLib.2.1.0\lib\net452\FastBitmapLib.dll</HintPath>
     </Reference>
     <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
@@ -81,14 +84,22 @@
       <HintPath>..\packages\HtmlRenderer.WinForms.1.5.0.6\lib\net45\HtmlRenderer.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Krypton.Toolkit, Version=70.22.11.312, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Krypton.Toolkit.70.22.11.312\lib\net472\Krypton.Toolkit.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Net" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -97,10 +108,16 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\AssemblyInfo.cs" />
     <Compile Include="Core\ColorStringFormat.cs" />
+    <Compile Include="Core\Controls\ColorPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core\FormatConverter\CMY.cs" />
     <Compile Include="Core\FormatConverter\CMYK.cs" />
     <Compile Include="Core\FormatConverter\HSL.cs" />
@@ -112,6 +129,7 @@
     <Compile Include="Core\PaletteColor.cs" />
     <Compile Include="Core\PaletteMemento.cs" />
     <Compile Include="Core\PaletteSaver.cs" />
+    <Compile Include="Core\Renderer\ToolStripRD.cs" />
     <Compile Include="Core\UpdateManager.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
@@ -138,18 +156,24 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Program.cs" />
-    <Compile Include="Forms\Dialog.cs" />
+    <Compile Include="Core\Controls\Dialog.cs" />
+    <Compile Include="Forms\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PaletteGeneratorForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\PaletteGeneratorForm.Designer.cs">
       <DependentUpon>PaletteGeneratorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PaletteInfoForm.cs">
+    <Compile Include="Forms\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\PaletteInfoForm.Designer.cs">
-      <DependentUpon>PaletteInfoForm.cs</DependentUpon>
+    <Compile Include="Forms\InfoForm.Designer.cs">
+      <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LowLevelHooks\KeyboardHook.cs" />
     <Compile Include="LowLevelHooks\MouseHook.cs" />
@@ -166,27 +190,30 @@
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PaletteGeneratorForm.resx">
       <DependentUpon>PaletteGeneratorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PaletteInfoForm.resx">
-      <DependentUpon>PaletteInfoForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\InfoForm.resx">
+      <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -197,49 +224,49 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_color_management_64019.png" />
+    <None Include="Resources\images\if_color_management_64019.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_add_35638.png" />
+    <None Include="Resources\images\if_add_35638.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_cog_35873.png" />
+    <None Include="Resources\images\if_cog_35873.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_arrow_switch_35692 %281%29.png" />
+    <None Include="Resources\images\if_arrow_switch_35692 %281%29.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_tree_64927.png" />
+    <None Include="Resources\images\if_tree_64927.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_update_64935.png" />
+    <None Include="Resources\images\if_update_64935.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_error_36026.png" />
+    <None Include="Resources\images\if_error_36026.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_disk_35974.png" />
+    <None Include="Resources\images\if_disk_35974.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_cancel_35815.png" />
+    <None Include="Resources\images\if_cancel_35815.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_copy_172587.png" />
+    <None Include="Resources\images\if_copy_172587.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_okay_14617.png" />
+    <None Include="Resources\images\if_okay_14617.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_color-mode_298751.png" />
+    <None Include="Resources\images\if_color-mode_298751.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_edit-file_85307.png" />
+    <None Include="Resources\images\if_edit-file_85307.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\colortech.ico" />
-    <None Include="Resources\if_palette_85337.png" />
-    <None Include="Resources\if_eyedroper_85322.png" />
-    <None Include="Resources\logo.png" />
+    <None Include="Resources\images\colortech.ico" />
+    <None Include="Resources\images\if_palette_85337.png" />
+    <None Include="Resources\images\if_eyedroper_85322.png" />
+    <None Include="Resources\images\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -254,31 +281,39 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\colortechlogo.png" />
+    <None Include="Resources\images\colortechlogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_gtk-quit_20542.png" />
+    <None Include="Resources\images\if_gtk-quit_20542.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_Open_1493293.png" />
+    <None Include="Resources\images\if_Open_1493293.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_Undo_1493283.png" />
+    <None Include="Resources\images\if_Undo_1493283.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_Redo_1493284.png" />
+    <None Include="Resources\images\if_Redo_1493284.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\color_wheel.png" />
+    <None Include="Resources\images\color_wheel.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_Help_1493288.png" />
+    <None Include="Resources\images\if_Help_1493288.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\if_download-alt_173001.png" />
+    <None Include="Resources\images\if_download-alt_173001.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\if_user-trash_118932.png" />
+    <None Include="Resources\images\trash.png" />
+    <None Include="Resources\images\blackwhite.png" />
+    <None Include="Resources\images\iconfinder_font_36086.png" />
+    <None Include="Resources\images\iconfinder_target_42367.png" />
+    <None Include="Resources\images\iconfinder_ui-toolbar_27362.png" />
+    <None Include="Resources\images\iconfinder_document_properties_64113.png" />
+    <Content Include="Resources\images\iconfinder_ui-status-bar-blue_46313.png" />
+    <Content Include="Resources\HTML\about.html" />
+    <Content Include="Resources\images\if_user-trash_118932.png" />
   </ItemGroup>
   <ItemGroup>
     <PublishFile Include="Resources\if_user-trash_118932.png">
@@ -292,6 +327,7 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

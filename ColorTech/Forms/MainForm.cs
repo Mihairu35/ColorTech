@@ -9,47 +9,39 @@ using ColorTech.Core;
 using ColorTech.Core.FormatConverter;
 using ColorTech.Forms;
 using ColorTech.Core.Drawing;
+using ColorTech.Core.Renderer;
 using FastBitmapLib;
+using System.Runtime.InteropServices;
 using RamGecTools;
+using System.Security.Principal;
 
 namespace ColorTech {
-	/// <summary>
-	/// Главная форма программы.
-	/// </summary>
-	public partial class MainForm: Form {
-		#region Переменные класса
-		Bitmap PreviewBMP; //битмап для просмотра цвета
-		Graphics PreviewGR; //объект для работы с графикой для просмотра цвета
-		Bitmap ColorBoxBMP; //битмап для блока выбора цвета
-		Graphics ColorBoxGR; //объект для работы с графикой для выбора цвета
-		NewMainGRaphics ColorBoxNewMainGR; //объект, расширяющий ColorBoxGR для работы с графиком цветовой палитрой.
-		Bitmap ScreenshotBMP; //битмап для экранной пипетки для создания скриншота
-		Graphics ScreenshotGR; //объект для работы с графикой экранной пипетки (для работы со скриншотом)
+    #region Режимы обновления цвета
+    public enum UpdateColorPanelsMode {
+        RGB,
+        HSV,
+        NONE
+    }
+    #endregion
 
+    #region Главная форма программы
+    public partial class MainForm: Form {
+		#region Системные переменные класса
+		private Bitmap PreviewBMP; //битмап для просмотра цвета
+		private Graphics PreviewGR; //объект для работы с графикой для просмотра цвета
+		private Bitmap ColorBoxBMP; //битмап для блока выбора цвета
+		private Graphics ColorBoxGR; //объект для работы с графикой для выбора цвета
+		private NewMainGRaphics ColorBoxNewMainGR; //объект, расширяющий ColorBoxGR для работы с графиком цветовой палитрой.
+		private Bitmap ScreenshotBMP; //битмап для экранной пипетки для создания скриншота
+		private Graphics ScreenshotGR; //объект для работы с графикой экранной пипетки (для работы со скриншотом)
 
 		//для обработки мыши и клавиатуры
-		MouseHook mouseHook = new MouseHook();
-		KeyboardHook keyboardHook = new KeyboardHook();
+		private MouseHook mouseHook = new MouseHook();
+		private KeyboardHook keyboardHook = new KeyboardHook();
 
-		public PaletteColor Color1; //выбранный цвет
-
-		public int ScreenshotScaleIndex = 0; //значение масштабирования скриншота
 		public bool IsSelectingScreenshotBox = false; //выбирается ли цвет через скриншот
 		public bool IsSelectingScreenshot = false; //выбирается ли скриншот через палитру
 		public bool IsSelectingColorBox = false; //выбирается ли цвет через палитру
-		public int ColorStringFormatIndex = 0; //значение выбранного формата цвета
-
-		public enum UpdateColorPanelsMode { //режимы обновления цвета
-			RGB,
-			HSV,
-			NONE
-		}
-
-		//настройка графики
-		public SmoothingMode GlobalSmoothingMode = SmoothingMode.AntiAlias;
-		public CompositingMode GlobalCompositingMode = CompositingMode.SourceOver;
-		public CompositingQuality GlobalompositingQuality = CompositingQuality.Default;
-		public TextRenderingHint GlobalTextRenderingHint = TextRenderingHint.SystemDefault;
 
 		//для хранения истории палитры
 		public PaletteOriginator POriginator;
@@ -62,46 +54,68 @@ namespace ColorTech {
 		public ColorStringFormatContext ColorStringFormatContext = new ColorStringFormatContext(new HTMLHexStrategy()); //форматирование цвета
 		#endregion
 
-		#region Логика управлением формой
-		/// <summary>
-		/// Инициализация главной формы и программы
-		/// </summary>
-		/// <param name="FileName">Адрес файла цветовой палитры. Используется, когда программой напрямую надо открыть этот файл.</param>
-		public MainForm(string FileName = null) {
+		#region Настройки программы
+		public PaletteColor Color1 = new PaletteColor(Properties.Settings.Default.LastColor); //выбранный цвет
+		public Font ColorPreviewFont = Properties.Settings.Default.ColorPreviewFont;
+		public int ScreenshotScaleIndex = Properties.Settings.Default.ScreenshotScaleIndex; //значение масштабирования скриншота
+		public int ColorStringFormatIndex = Properties.Settings.Default.ColorStringFormatIndex; //значение выбранного формата цвета
+		public bool ToolBarVisible = Properties.Settings.Default.ToolBarVisible;
+		public bool StatusBarVisible = Properties.Settings.Default.StatusBarVisible;
+		public bool ScreenshotCrosshairVisible = Properties.Settings.Default.ScreenshotCrosshairVisible;
+		public bool ColorPreviewTextVisible = Properties.Settings.Default.ColorPreviewTextVisible;
+
+		//настройка графики
+		public SmoothingMode GlobalSmoothingMode = SmoothingMode.AntiAlias;
+		public CompositingMode GlobalCompositingMode = CompositingMode.SourceOver;
+		public CompositingQuality GlobalompositingQuality = CompositingQuality.Default;
+		public TextRenderingHint GlobalTextRenderingHint = TextRenderingHint.SystemDefault;
+		#endregion
+
+		#region Отображение окна поверх всех остальных в системе
+		[DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetWindowPos(IntPtr hWnd,
+            int hWndInsertAfter, int x, int y, int cx, int cy, int uFlags);
+
+        private const int HWND_TOPMOST = -1;
+        private const int HWND_NOTOPMOST = -2;
+        private const int SWP_NOMOVE = 0x0002;
+        private const int SWP_NOSIZE = 0x0001;
+        #endregion
+
+        #region Логика управлением формой
+        /// <summary>
+        /// Инициализация главной формы и программы
+        /// </summary>
+        /// <param name="FileName">Адрес файла цветовой палитры. Используется, когда программой напрямую надо открыть этот файл.</param>
+        public MainForm(string FileName = null) {
 			InitializeComponent();
 
 			//инициализируем объекты
 			//просмотр цвета
-			PreviewBMP = new Bitmap(ColorPreviewMain.Width, ColorPreviewMain.Height);
-			PreviewGR = Graphics.FromImage(PreviewBMP);
-			PreviewGR.SmoothingMode = GlobalSmoothingMode;
-			PreviewGR.CompositingMode = GlobalCompositingMode;
-			PreviewGR.CompositingQuality = GlobalompositingQuality;
-			PreviewGR.TextRenderingHint = GlobalTextRenderingHint;
+			this.PreviewBMP = new Bitmap(ColorPreviewMain.Width, ColorPreviewMain.Height);
+			this.PreviewGR = Graphics.FromImage(PreviewBMP);
+			this.PreviewGR.SmoothingMode = GlobalSmoothingMode;
+			this.PreviewGR.CompositingMode = GlobalCompositingMode;
+			this.PreviewGR.CompositingQuality = GlobalompositingQuality;
+			this.PreviewGR.TextRenderingHint = GlobalTextRenderingHint;
 
 			//цветовая палитра
-			ColorBoxBMP = new Bitmap(SelectColorBox.Width, SelectColorBox.Height);
-			ColorBoxGR = Graphics.FromImage(ColorBoxBMP);
-			ColorBoxNewMainGR = new NewMainGRaphics(ColorBoxGR);
-			ColorBoxGR.SmoothingMode = GlobalSmoothingMode;
-			ColorBoxGR.CompositingMode = GlobalCompositingMode;
-			ColorBoxGR.CompositingQuality = GlobalompositingQuality;
-			ColorBoxGR.TextRenderingHint = GlobalTextRenderingHint;
+			this.ColorBoxBMP = new Bitmap(SelectColorBox.Width, SelectColorBox.Height);
+			this.ColorBoxGR = Graphics.FromImage(ColorBoxBMP);
+			this.ColorBoxNewMainGR = new NewMainGRaphics(ColorBoxGR);
+			this.ColorBoxGR.SmoothingMode = GlobalSmoothingMode;
+			this.ColorBoxGR.CompositingMode = GlobalCompositingMode;
+			this.ColorBoxGR.CompositingQuality = GlobalompositingQuality;
+			this.ColorBoxGR.TextRenderingHint = GlobalTextRenderingHint;
 
 			//скриншот для экранной пипетки
-			ScreenshotBMP = new Bitmap(ScreenshotBox.Width, ScreenshotBox.Height);
-			ScreenshotGR = Graphics.FromImage(ScreenshotBMP);
-			ScreenshotGR.SmoothingMode = GlobalSmoothingMode;
-			ScreenshotGR.CompositingMode = GlobalCompositingMode;
-			ScreenshotGR.CompositingQuality = GlobalompositingQuality;
-			ScreenshotGR.TextRenderingHint = GlobalTextRenderingHint; //сглаживание текста
-
-			//первоначальные установки компонентов в форме, значения которых в дальнейшем будут сохраняться
-			Color1 = new PaletteColor(Color.Black);
-
-			//выбранные настройки на главной форме, которые будут сохранены после закрытия программы
-			ColorFormatComboBox.SelectedIndex = 0; //индекс выбранного цветового формата
-			ScreenshotScaleComboBox.SelectedIndex = 0; //индекс выбранного масштабирования для скриншота экранной пипетки
+			this.ScreenshotBMP = new Bitmap(ScreenshotBox.Width, ScreenshotBox.Height);
+			this.ScreenshotGR = Graphics.FromImage(ScreenshotBMP);
+			this.ScreenshotGR.SmoothingMode = GlobalSmoothingMode;
+			this.ScreenshotGR.CompositingMode = GlobalCompositingMode;
+			this.ScreenshotGR.CompositingQuality = GlobalompositingQuality;
+			this.ScreenshotGR.TextRenderingHint = GlobalTextRenderingHint; //сглаживание текста
 
 			//специальный хук для мышки, который позволяет перехватывать ее события вне главного окна программы
 			mouseHook.LeftButtonUp += new MouseHook.MouseHookCallback(MouseHook_ScreenshotUP);
@@ -121,10 +135,29 @@ namespace ColorTech {
 
 					OpenedFileName = FileName;
 					StatusFileName.Text = System.IO.Path.GetFileName(FileName);
-					StatusPaletteAuthor.Text = PGD.Author;
+					StatusStrip.Text = PGD.Author;
 				} catch { }
 			}
 		}
+
+		private void SaveOptions() {
+			Properties.Settings.Default.LastColor = Color1.MainColor;
+			Properties.Settings.Default.ColorStringFormatIndex = ColorFormatComboBox.SelectedIndex;
+			Properties.Settings.Default.ScreenshotScaleIndex = ScreenshotScaleComboBox.SelectedIndex;
+			Properties.Settings.Default.StatusBarVisible = MenuItemStatusBarVisible.Checked;
+			Properties.Settings.Default.ToolBarVisible = MenuItemToolbarVisible.Checked;
+			Properties.Settings.Default.Save();
+		}
+
+        private void UpdateOptions() {
+            if(Properties.Settings.Default.PopupWindow == true) {
+                SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+            } else {
+                SetWindowPos(this.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+            }
+
+			UpdateColorPanels(UpdateColorPanelsMode.NONE);
+        }
 
 		/// <summary>
 		/// Проверка на обновления
@@ -223,7 +256,7 @@ namespace ColorTech {
 		/// Обновить цветовую панелль
 		/// </summary>
 		/// <param name="mode">Режим обновления цветовой панели</param>
-		private void UpdateColorPanels(UpdateColorPanelsMode mode = UpdateColorPanelsMode.NONE) {
+		public void UpdateColorPanels(UpdateColorPanelsMode mode = UpdateColorPanelsMode.NONE) {
 			LockSliders();
 
 			switch(mode) {
@@ -255,23 +288,24 @@ namespace ColorTech {
 			using(Brush Brush1 = new SolidBrush(Color1.MainColor)) {
 				PreviewGR.Clear(Color.Transparent); //очищаем холст
 				PreviewGR.FillEllipse(Brush1, 0, 0, ColorPreviewMain.Width - 2, ColorPreviewMain.Height - 2);
-
-				using(Font drawFont = new Font("Segoe UI", 10)) {
 					using(SolidBrush drawBrush = new SolidBrush(ImageEffects.GetContrastTextColor(Color1.MainColor))) {
 						using(StringFormat sf = new StringFormat()) {
 							sf.Alignment = StringAlignment.Center;
 							sf.LineAlignment = StringAlignment.Center;
-							PreviewGR.DrawString("ColorTech", drawFont, drawBrush, PreviewBMP.Width / 2, PreviewBMP.Height / 2, sf);
+
+							PreviewGR.DrawString("ColorTech", ColorPreviewFont, drawBrush, PreviewBMP.Width / 2, PreviewBMP.Height / 2, sf);
 						}
 					}
-				}
 			}
+
 			ColorPreviewMain.Image = PreviewBMP; //отображаем изображение в PictureBox
 
-			//заполняем информацию о выбранном цвете
-			HEXCopyTextBox.Text = ColorStringFormatContext.GetColorFormat(Color1.MainColor);
+            //заполняем информацию о выбранном цвете
+            string FormatColor = ColorStringFormatContext.GetColorFormat(Color1.MainColor);
+            if (Properties.Settings.Default.ColorFormatUppercase == false) FormatColor = FormatColor.ToLower(); 
+            HEXCopyTextBox.Text = FormatColor;
 
-			UpdateColorBox();
+            UpdateColorBox();
 			UnlockSliders();
 		}
 
@@ -517,10 +551,8 @@ namespace ColorTech {
 				}
 				Color1.SetColor(c);
 
-				using(Pen p = new Pen(new SolidBrush(Color.Black))) {
-					ScreenshotGR.DrawLine(p, ScreenshotBMP.Width / 2, 50, ScreenshotBMP.Width / 2, ScreenshotBMP.Height - 50);
-					ScreenshotGR.DrawLine(p, 91, ScreenshotBMP.Height / 2, ScreenshotBMP.Width - 91, ScreenshotBMP.Height / 2);
-				}
+				//рисуем крестовину
+				
 
 				ScreenshotBox.Image = ScreenshotBMP;
 
@@ -586,10 +618,9 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MainForm_Load(object sender, EventArgs e) {
-			try {
-				Color1.SetColor(Properties.Settings.Default.LastColor);
-				ColorFormatComboBox.SelectedIndex = Properties.Settings.Default.LastColorStringFormatIndex;
-				ScreenshotScaleComboBox.SelectedIndex = Properties.Settings.Default.LastZoom;
+            try {
+				ColorFormatComboBox.SelectedIndex = Properties.Settings.Default.ColorStringFormatIndex;
+				ScreenshotScaleComboBox.SelectedIndex = Properties.Settings.Default.ScreenshotScaleIndex;
 			} catch { }
 
 			using(SolidBrush brush = new SolidBrush(SystemColors.Control)) {
@@ -615,15 +646,15 @@ namespace ColorTech {
 			PHistory = new PaletteHistory();
 			PHistory.History.Add(POriginator.SavePaletteState());
 
-			UpdateColorPanels(UpdateColorPanelsMode.NONE); //обновляем все элементы управления цветом в форме
-			UpdatePaletteHistory();
+            UpdateOptions();
+            UpdatePaletteHistory();
 
 			//проверка на обновления
 			if(Properties.Settings.Default.OpenUpdateWindow == true) {
 				Task CheckUpdateTask = new Task(CheckUpdate);
 				CheckUpdateTask.Start();
 			}
-		}
+        }
 		/// <summary>
 		/// Событие двойного нажатия по строке в таблице цветовой палитры
 		/// </summary>
@@ -643,10 +674,10 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
-			Properties.Settings.Default.LastColor = Color1.MainColor;
-			Properties.Settings.Default.LastColorStringFormatIndex = ColorFormatComboBox.SelectedIndex;
-			Properties.Settings.Default.LastZoom = ScreenshotScaleComboBox.SelectedIndex;
-			Properties.Settings.Default.Save();
+			SaveOptions();
+
+			TrayIcon.Visible = false;
+			TrayIcon.Dispose();
 		}
 
 		/// <summary>
@@ -787,7 +818,7 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void StatusPaletteAuthor_Click(object sender, EventArgs e) {
-			using(PaletteInfoForm InfoDialog = new PaletteInfoForm()) {
+			using(InfoForm InfoDialog = new InfoForm()) {
 				InfoDialog.Owner = this;
 				InfoDialog.ShowDialog();
 			}
@@ -804,8 +835,9 @@ namespace ColorTech {
 		private void ToolBtnEditColorName_Click(object sender, EventArgs e) {
 			if(ColorGrid.SelectedRows.Count != 0) {
 				string ColorName = "";
-				Forms.Dialog.InputBox("Редактировать цвет", "Название цвета:", ref ColorName);
-				ColorGrid.Rows[ColorGrid.SelectedRows[0].Index].Cells[0].Value = ColorName;
+                if (Forms.Dialog.InputBox("Редактировать цвет", "Название цвета:", ref ColorName) == DialogResult.OK) {
+                    ColorGrid.Rows[ColorGrid.SelectedRows[0].Index].Cells[0].Value = ColorName;
+                }
 			} else {
 				MessageBox.Show("Выберите цвет", "Уведомление", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 			}
@@ -885,13 +917,7 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void ToolBtnUndo_Click(object sender, EventArgs e) {
-			if(PHistory.ActiveIndex != 0) {
-				PHistory.ActiveIndex--;
-			}
-			POriginator.LoadColorState(PHistory.History[PHistory.ActiveIndex]);
-
-			UpdateColorPanels(UpdateColorPanelsMode.NONE);
-			UpdatePaletteHistory();
+			MenuItemUndo.PerformClick();
 		}
 
 		/// <summary>
@@ -900,13 +926,7 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void ToolBtnRedo_Click(object sender, EventArgs e) {
-			if(PHistory.ActiveIndex != PHistory.History.Count - 1) {
-				PHistory.ActiveIndex++;
-			}
-			POriginator.LoadColorState(PHistory.History[PHistory.ActiveIndex]);
-
-			UpdateColorPanels(UpdateColorPanelsMode.NONE);
-			UpdatePaletteHistory();
+			MenuItemRedo.PerformClick();
 		}
 
 		/// <summary>
@@ -915,25 +935,7 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void ToolBtnOpen_Click(object sender, EventArgs e) {
-			using(OpenFileDialog OpenDialog = new OpenFileDialog()) {
-				OpenDialog.Title = "Открыть цветовую схему";
-				OpenDialog.Filter = "Цветовые схемы (*.ctcg)|*.ctcg";
-
-				if(OpenDialog.ShowDialog() == DialogResult.OK) {
-					PaletteSaver saver = new PaletteSaver();
-					PGD = saver.Open(OpenDialog.FileName);
-
-					ColorGrid.Rows.Clear();
-					foreach(PaletteRow row in PGD.PaletteColors) {
-						AddColorToPaletteGrid(ColorGrid, row.Name, row.HEX);
-					}
-
-					OpenedFileName = OpenDialog.FileName;
-					StatusFileName.Text = System.IO.Path.GetFileName(OpenDialog.FileName);
-					StatusPaletteAuthor.Text = PGD.Author;
-				}
-			}
-			GC.Collect();
+			MenuItemOpen.PerformClick();
 		}
 
 		/// <summary>
@@ -942,21 +944,7 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void ToolBtnSave_Click(object sender, EventArgs e) {
-			using(SaveFileDialog SaveDialog = new SaveFileDialog()) {
-				SaveDialog.Title = "Сохранить цветовую схему";
-				SaveDialog.Filter = "Цветовые схемы (*.ctcg)|*.ctcg";
-				if(SaveDialog.ShowDialog() == DialogResult.OK) {
-
-					RefreshPaletteData();
-
-					PaletteSaver saver = new PaletteSaver();
-					saver.Save(SaveDialog.FileName, PGD);
-
-					OpenedFileName = SaveDialog.FileName;
-					StatusFileName.Text = System.IO.Path.GetFileName(SaveDialog.FileName);
-				}
-			}
-			GC.Collect();
+			MenuItemSaveAs.PerformClick();
 		}
 
 		/// <summary>
@@ -965,7 +953,7 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void ToolBtnClose_Click(object sender, EventArgs e) {
-			Close();
+			MenuItemClose.PerformClick();
 		}
 
 		/// <summary>
@@ -1008,7 +996,7 @@ namespace ColorTech {
 					PGD.Author = EditDialog.Author;
 					PGD.SiteLink = EditDialog.SiteLink;
 					PGD.Description = EditDialog.Description;
-					StatusPaletteAuthor.Text = PGD.Author;
+					StatusStrip.Text = PGD.Author;
 				}
 			}
 		}
@@ -1019,10 +1007,10 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MenuItemPaletteGenerator_Click(object sender, EventArgs e) {
-			using(PaletteGeneratorForm PGForm = new PaletteGeneratorForm()) {
-				if(PGForm.ShowDialog() == DialogResult.OK) {
+			using (PaletteGeneratorForm PGForm = new PaletteGeneratorForm()) {
+				if (PGForm.ShowDialog() == DialogResult.OK) {
 					int num = 1;
-					foreach(Color color in PGForm.SelectedColors) {
+					foreach (Color color in PGForm.SelectedColors) {
 						AddColorToPaletteGrid(ColorGrid, PGForm.PaletteName + " " + "#" + num, ColorFormatConverter.GetHEX(color));
 						num++;
 					}
@@ -1036,7 +1024,8 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MenuItemClose_Click(object sender, EventArgs e) {
-			Close();
+			SaveOptions();
+			Environment.Exit(0);
 		}
 
 		/// <summary>
@@ -1045,7 +1034,7 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MenuItemAbout_Click(object sender, EventArgs e) {
-			using(AboutForm about = new AboutForm()) {
+			using (AboutForm about = new AboutForm()) {
 				about.ShowDialog();
 			}
 		}
@@ -1056,7 +1045,25 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MenuItemOpen_Click(object sender, EventArgs e) {
-			ToolBtnOpen.PerformClick();
+			using (OpenFileDialog OpenDialog = new OpenFileDialog()) {
+				OpenDialog.Title = "Открыть цветовую схему";
+				OpenDialog.Filter = "Цветовые схемы (*.ctcg)|*.ctcg";
+
+				if (OpenDialog.ShowDialog(ForegroundWindow.CurrentWindow) == DialogResult.OK) {
+					PaletteSaver saver = new PaletteSaver();
+					PGD = saver.Open(OpenDialog.FileName);
+
+					ColorGrid.Rows.Clear();
+					foreach (PaletteRow row in PGD.PaletteColors) {
+						AddColorToPaletteGrid(ColorGrid, row.Name, row.HEX);
+					}
+
+					OpenedFileName = OpenDialog.FileName;
+					StatusFileName.Text = System.IO.Path.GetFileName(OpenDialog.FileName);
+					StatusStrip.Text = PGD.Author;
+				}
+			}
+			GC.Collect();
 		}
 
 		/// <summary>
@@ -1081,7 +1088,13 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MenuItemUndo_Click(object sender, EventArgs e) {
-			ToolBtnUndo.PerformClick();
+			if (PHistory.ActiveIndex != 0) {
+				PHistory.ActiveIndex--;
+			}
+			POriginator.LoadColorState(PHistory.History[PHistory.ActiveIndex]);
+
+			UpdateColorPanels(UpdateColorPanelsMode.NONE);
+			UpdatePaletteHistory();
 		}
 
 		/// <summary>
@@ -1090,7 +1103,13 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MenuItemRedo_Click(object sender, EventArgs e) {
-			ToolBtnRedo.PerformClick();
+			if (PHistory.ActiveIndex != PHistory.History.Count - 1) {
+				PHistory.ActiveIndex++;
+			}
+			POriginator.LoadColorState(PHistory.History[PHistory.ActiveIndex]);
+
+			UpdateColorPanels(UpdateColorPanelsMode.NONE);
+			UpdatePaletteHistory();
 		}
 
 		/// <summary>
@@ -1137,7 +1156,21 @@ namespace ColorTech {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void MenuItemSaveAs_Click(object sender, EventArgs e) {
-			ToolBtnSave.PerformClick();
+			using (SaveFileDialog SaveDialog = new SaveFileDialog()) {
+				SaveDialog.Title = "Сохранить цветовую схему";
+				SaveDialog.Filter = "Цветовые схемы (*.ctcg)|*.ctcg";
+				if (SaveDialog.ShowDialog(ForegroundWindow.CurrentWindow) == DialogResult.OK) {
+
+					RefreshPaletteData();
+
+					PaletteSaver saver = new PaletteSaver();
+					saver.Save(SaveDialog.FileName, PGD);
+
+					OpenedFileName = SaveDialog.FileName;
+					StatusFileName.Text = System.IO.Path.GetFileName(SaveDialog.FileName);
+				}
+			}
+			GC.Collect();
 		}
 
 		/// <summary>
@@ -1161,6 +1194,205 @@ namespace ColorTech {
 				}
 			} catch { }
 		}
-	}
+
+		private void ToolBtnPaletteGenerator_Click(object sender, EventArgs e) {
+			MenuItemPaletteGenerator.PerformClick();
+		}
+
+		private void ToolBtnAbout_Click(object sender, EventArgs e) {
+			MenuItemAbout.PerformClick();
+		}
+
+		private void MenuItemOptions_Click(object sender, EventArgs e) {
+			try {
+				using (OptionsForm OForm = new OptionsForm()) {
+					if (OForm.ShowDialog() == DialogResult.OK) {
+						UpdateOptions();
+
+						using(WindowsIdentity identity = WindowsIdentity.GetCurrent()) {
+							WindowsPrincipal principal = new WindowsPrincipal(identity);
+							if(principal.IsInRole(WindowsBuiltInRole.Administrator)) {
+								try {
+									if(Properties.Settings.Default.StartProgrammOnStartup == true) {
+										Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+										rk.SetValue("ColorTech", Application.ExecutablePath);
+									} else {
+										Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+										rk.DeleteValue("ColorTech");
+									}
+								} catch(Exception ex) {
+									MessageBox.Show(ex.Message);
+								}
+							}
+						}
+					}
+				}
+			} catch { }
+		}
+
+		private void ToolBtnOptions_Click(object sender, EventArgs e) {
+			MenuItemOptions.PerformClick();
+		}
+
+        private void Timer_CheckUpdate_Tick(object sender, EventArgs e) {
+            try {
+                CheckUpdate();
+            } catch { }
+        }
+
+        private void MenuItemToolbarVisible_Click(object sender, EventArgs e) {
+            MenuItemToolbarVisible.Checked = !MenuItemToolbarVisible.Checked;
+            ToolStrip3.Visible = MenuItemToolbarVisible.Checked;
+
+			if(ToolStrip3.Visible == false) {
+				this.Height -= ToolStrip3.Height;
+			} else {
+				this.Height += ToolStrip3.Height;
+			}
+		}
+
+		private void MenuItemCrosshairVisible_Click(object sender, EventArgs e) {
+			MenuItemCrosshairVisible.Checked = !MenuItemCrosshairVisible.Checked;
+		}
+
+		private void OpenToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemOpen.PerformClick();
+		}
+
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+			if (Properties.Settings.Default.ShowOnTray == true) {
+				e.Cancel = true;
+				Hide();
+				TrayIcon.ShowBalloonTip(0, "ColorTech свернут в трей", "Вы можете обратно развернуть программу, нажав по иконке левой кнопкой мыши.\nЧтобы открыть меню, нажмите на иконку правой кнопкой мыши.", ToolTipIcon.Info);
+			}
+		}
+
+		private void TSMenu_Close_Click(object sender, EventArgs e) {
+			ToolBtnClose.PerformClick();
+		}
+
+		private void TrayIcon_MouseUp(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.Left) {
+				this.Show();
+			}
+		}
+
+		private void SaveToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemSave.PerformClick();
+		}
+
+		private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemSaveAs.PerformClick();
+		}
+
+		private void PaletteGeneratorToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemPaletteGenerator.PerformClick();
+		}
+
+		private void SelectColorDialogToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemColorDialog.PerformClick();
+		}
+
+		private void OptionsToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemOptions.PerformClick();
+		}
+
+		private void CheckUpdatesToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemCheckUpdate.PerformClick();
+		}
+
+		private void MenuItemPreviewFontStyle_Click(object sender, EventArgs e) {
+			using (FontDialog FD = new FontDialog()) {
+				FD.Font = this.ColorPreviewFont;
+				if (FD.ShowDialog() == DialogResult.OK) {
+					this.ColorPreviewFont = FD.Font;
+					this.UpdateColorPanels(UpdateColorPanelsMode.NONE);
+					Properties.Settings.Default.ColorPreviewFont = FD.Font;
+				}
+			}
+		}
+
+		private void MenuItemStatusBarVisible_Click(object sender, EventArgs e) {
+			MenuItemStatusBarVisible.Checked = !MenuItemStatusBarVisible.Checked;
+			StatusStrip.Visible = MenuItemStatusBarVisible.Checked;
+
+			if (StatusStrip.Visible == false) {
+				this.Height -= StatusStrip.Height;
+			} else {
+				this.Height += StatusStrip.Height;
+			}
+		}
+
+		private void AboutToolStripMenuItem_Click(object sender, EventArgs e) {
+			MenuItemAbout.PerformClick();
+		}
+
+		private void MenuItemPreviewFontVisible_Click(object sender, EventArgs e) {
+			MenuItemPreviewFontVisible.Checked = !MenuItemPreviewFontVisible.Checked;
+
+		}
+
+		private void ToolBtnPaletteInfo_Click(object sender, EventArgs e) {
+			MenuItemEditPaletteInfo.PerformClick();
+		}
+    }
+    #endregion
+
+    #endregion
+
+    #region Хуки
+    internal class NonClientRegionAPI
+    {
+        [DllImport("DwmApi.dll")]
+        public static extern void DwmIsCompositionEnabled(ref bool pfEnabled);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WTA_OPTIONS
+        {
+            public WTNCA dwFlags;
+            public WTNCA dwMask;
+        }
+
+        [Flags]
+        public enum WTNCA : uint
+        {
+            NODRAWCAPTION = 1,
+            NODRAWICON = 2,
+            NOSYSMENU = 4,
+            NOMIRRORHELP = 8,
+            VALIDBITS = NODRAWCAPTION | NODRAWICON | NOSYSMENU | NOMIRRORHELP
+        }
+
+        public enum WINDOWTHEMEATTRIBUTETYPE : uint
+        {
+            /// <summary>Non-client area window attributes will be set.</summary>
+            WTA_NONCLIENT = 1,
+        }
+
+        [DllImport("uxtheme.dll")]
+        public static extern int SetWindowThemeAttribute(
+            IntPtr hWnd,
+            WINDOWTHEMEATTRIBUTETYPE wtype,
+            ref WTA_OPTIONS attributes,
+            uint size);
+    }
 	#endregion
+
+	class ForegroundWindow : IWin32Window {
+		[DllImport("user32.dll")]
+		public static extern IntPtr GetForegroundWindow();
+
+		static ForegroundWindow obj = null;
+		public static ForegroundWindow CurrentWindow {
+			get {
+				if (obj == null)
+					obj = new ForegroundWindow();
+				return obj;
+			}
+		}
+		public IntPtr Handle {
+			get { return GetForegroundWindow(); }
+		}
+	}
+
 }

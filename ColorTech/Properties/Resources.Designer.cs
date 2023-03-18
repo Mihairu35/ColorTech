@@ -19,7 +19,7 @@ namespace ColorTech.Properties {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,6 +61,45 @@ namespace ColorTech.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;
+        ///&lt;head&gt;
+        ///	&lt;meta charset=&quot;UTF-8&quot; /&gt;
+        ///	&lt;title&gt;О программе&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///        body {
+        ///            font-size: 14px;
+        ///        }
+        ///
+        ///        p {
+        ///            margin: 0px;
+        ///            padding: 0px;
+        ///            margin-bottom: 5px;
+        ///        }
+        ///    &lt;/style&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;p&gt;&lt;u&gt;&lt;b&gt;ColorTech&lt;/b&gt;&lt;/u&gt; - экранная пипетка, а также инструмент для работы с цветовой палитрой.&lt;/p&gt;
+        ///    &lt;p&gt;Распространяется по лицензии MIT.&lt;/p&gt;
+        ///    &lt;p&gt;&lt;b&gt;EMail:&lt;/b&gt; &lt;a href=&quot;mailto:info@quadvector.ru&quot;&gt; [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string about {
+            get {
+                return ResourceManager.GetString("about", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap blackwhite {
+            get {
+                object obj = ResourceManager.GetObject("blackwhite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap color_wheel {
@@ -71,21 +110,61 @@ namespace ColorTech.Properties {
         }
         
         /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Icon colortech {
+        internal static System.Drawing.Bitmap colortechlogo {
             get {
-                object obj = ResourceManager.GetObject("colortech", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                object obj = ResourceManager.GetObject("colortechlogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap colortechlogo {
+        internal static System.Drawing.Bitmap iconfinder_document_properties_64113 {
             get {
-                object obj = ResourceManager.GetObject("colortechlogo", resourceCulture);
+                object obj = ResourceManager.GetObject("iconfinder_document_properties_64113", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconfinder_font_36086 {
+            get {
+                object obj = ResourceManager.GetObject("iconfinder_font_36086", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconfinder_target_42367 {
+            get {
+                object obj = ResourceManager.GetObject("iconfinder_target_42367", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconfinder_ui_status_bar_blue_46313 {
+            get {
+                object obj = ResourceManager.GetObject("iconfinder_ui-status-bar-blue_46313", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconfinder_ui_toolbar_27362 {
+            get {
+                object obj = ResourceManager.GetObject("iconfinder_ui_toolbar_27362", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -303,9 +382,9 @@ namespace ColorTech.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap if_user_trash_118932 {
+        internal static System.Drawing.Bitmap logo {
             get {
-                object obj = ResourceManager.GetObject("if_user-trash_118932", resourceCulture);
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -313,9 +392,9 @@ namespace ColorTech.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logo {
+        internal static System.Drawing.Bitmap trash {
             get {
-                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                object obj = ResourceManager.GetObject("trash", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

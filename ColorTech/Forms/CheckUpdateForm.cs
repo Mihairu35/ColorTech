@@ -19,18 +19,19 @@ namespace ColorTech.Forms {
 
 		private void Task_GetUpdateInfo() {
 			UpdateInfo = UpdateManager.GetUpdateFullInfo();
+			BeginInvoke(new MethodInvoker(delegate {
+				if(AssemblyInfo.AssemblyVersion == UpdateInfo.version) {
+					LabelCheckUpdate.Text = "Обновления отсутствуют.";
+				} else {
+					BeginInvoke(new MethodInvoker(delegate {
+						VersionChangelog.Text = UpdateInfo.changelog;
+						LabelLastVersionValue.Text = UpdateInfo.version;
+						tabControl1.SelectedIndex = 1;
+					}));
 
-			if(AssemblyInfo.AssemblyVersion == UpdateInfo.version) {
-				LabelCheckUpdate.Text = "Обновления отсутствуют.";
-			} else {
-				BeginInvoke(new MethodInvoker(delegate {
-					VersionChangelog.Text = UpdateInfo.changelog;
-					LabelLastVersionValue.Text = UpdateInfo.version;
-					tabControl1.SelectedIndex = 1;
-				}));
-
-				InstallTmpPath = Path.GetTempPath() + "/" + Path.GetFileName(new Uri(UpdateInfo.download_link).LocalPath);
-			}
+					InstallTmpPath = Path.GetTempPath() + "/" + Path.GetFileName(new Uri(UpdateInfo.download_link).LocalPath);
+				}
+			}));
 		}
 
 		private void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
@@ -52,8 +53,10 @@ namespace ColorTech.Forms {
 		}
 
 		private void CheckUpdateForm_Load(object sender, EventArgs e) {
-			Task GetUpdateInfoThread = new Task(Task_GetUpdateInfo);
-			GetUpdateInfoThread.Start();
+			animator1.SetDecoration(Logo, AnimatorNS.DecorationType.BottomMirror);
+
+			Task UpdateTask = new Task(Task_GetUpdateInfo);
+			UpdateTask.Start();
 
 			LabelCurrentVersionValue.Text = AssemblyInfo.AssemblyVersion;
 
@@ -66,19 +69,21 @@ namespace ColorTech.Forms {
 			}
 
 			CheckBoxOpenUpdateWindow.Checked = Properties.Settings.Default.OpenUpdateWindow;
+
+			GC.Collect();
 		}
 
 		private void BtnLoad_Click(object sender, EventArgs e) {
 			UpdateManager.DownloadFile(new Uri(UpdateInfo.download_link), InstallTmpPath, client_DownloadProgressChanged, client_DownloadFileCompleted);
 		}
 
-		private void BtnCancel_Click(object sender, EventArgs e) {
-			Close();
-		}
-
 		private void CheckUpdateForm_FormClosing(object sender, FormClosingEventArgs e) {
 			Properties.Settings.Default.OpenUpdateWindow = CheckBoxOpenUpdateWindow.Checked;
 			
+		}
+
+		private void BtnOK_Click(object sender, EventArgs e) {
+			Close();
 		}
 	}
 }
